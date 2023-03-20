@@ -44,7 +44,7 @@ Image::Image(int rows, int cols, int channels, unsigned char* data) {
 		_colRange = Range(0, cols);
 		totalColLen = _colRange.end();
 		_channels = channels;
-		_data = new unsigned char[total()*_channels];
+		_data = data;
 		isOuterData = true;
 	}
 }
