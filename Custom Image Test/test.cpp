@@ -19,19 +19,19 @@ TEST(Image, Constructors) {
     Image img2 = Image(10, 0, 3);
     EXPECT_TRUE(img2.data() == nullptr);
     EXPECT_EQ(img2.cols(), 0);
-    EXPECT_EQ(img2.rows(), 10);
-    EXPECT_EQ(img2.channels(), 3);
+    EXPECT_EQ(img2.rows(), 0);
+    EXPECT_EQ(img2.channels(), 0);
     EXPECT_EQ(img2.total(), 0);
     EXPECT_TRUE(img2.empty());
     EXPECT_EQ(img2.countRef(), 1);
 
     Image img3 = Image(10, 10, 3);
-    EXPECT_TRUE(img3.data() == nullptr);
+    EXPECT_FALSE(img3.data() == nullptr);
     EXPECT_EQ(img3.cols(), 10);
     EXPECT_EQ(img3.rows(), 10);
     EXPECT_EQ(img3.channels(), 3);
     EXPECT_EQ(img3.total(), 100);
-    EXPECT_TRUE(img3.empty());
+    EXPECT_FALSE(img3.empty());
     EXPECT_EQ(img3.countRef(), 1);
 
     Image img4 = Image(3, 3, 2, data);
@@ -63,7 +63,6 @@ TEST(Image, CopyingAndDestructing) {
     EXPECT_EQ(img1->countRef(), 3);
     EXPECT_EQ(img2.countRef(), 3);
     EXPECT_EQ(img3.countRef(), 3);
-
     EXPECT_EQ(img3.cols(), 2);
     EXPECT_EQ(img3.rows(), 2);
     EXPECT_EQ(img3.channels(), 2);

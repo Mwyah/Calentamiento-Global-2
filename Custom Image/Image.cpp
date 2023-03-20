@@ -7,16 +7,46 @@
 #include <algorithm>
 #include <iostream>
 
+
+namespace {
+	bool isValid(int rows, int cols, int channels) {
+		return (rows > 0 && cols > 0 && channels > 0);
+	}
+
+	bool isValid(int rows, int cols, int channels, unsigned char* data) {
+		return (rows > 0 && cols > 0 && channels > 0 && data);
+	}
+}
+
+Image::Image() {
+	_countRef = new size_t(1);
+}
+
+Image::Image(int rows, int cols, int channels) {
+
+	_countRef = new size_t(1);
+
+	if (isValid(rows, cols, channels)) {
+		_rowRange = Range(0, rows);
+		_colRange = Range(0, cols);
+		totalColLen = _colRange.end();
+		_channels = channels;
+		_data = new unsigned char[total()*_channels];
+	}
+}
+
 Image::Image(int rows, int cols, int channels, unsigned char* data) {
 
-	_rowRange = Range(0, rows);
-	_colRange = Range(0, cols);
-	totalColLen = _colRange.end();
-	_channels = (channels > 0) ? channels : 0;
-	_data = data;
 	_countRef = new size_t(1);
-	isOuterData = (data) ? true : false;
-	
+
+	if (isValid(rows, cols, channels, data)) {
+		_rowRange = Range(0, rows);
+		_colRange = Range(0, cols);
+		totalColLen = _colRange.end();
+		_channels = channels;
+		_data = new unsigned char[total()*_channels];
+		isOuterData = true;
+	}
 }
 
 Image::Image(const Image& image) {
@@ -69,19 +99,19 @@ Image& Image::operator=(const Image& image) {
 
 	return *this;
 }
-Image Image::operator()(const Range& rowRange, const Range& colRange) {
+Image Image::operator()(const Range& rowRange, const Range& colRange) const{
 
 	return Image(*this, rowRange, colRange);
 }
 
-Image Image::clone() {
+Image Image::clone() const{
 
 	Image res;
 	cloneTo(res);
 
 	return res;
 }
-void Image::cloneTo(Image& image) {
+void Image::cloneTo(Image& image) const{
 
 	if (this != &image) {
 		image._colRange = Range(0, cols());
@@ -116,14 +146,14 @@ void Image::release() {
 	(*_countRef)--;
 
 	if (*_countRef == 0 && !isOuterData) {
-		delete _data;
+		delete[] _data;
 		_data = nullptr;
 		delete _countRef;
 		_countRef = nullptr;
 	}
 }
 
-Image Image::col(int x) {
+Image Image::col(int x) const{
 
 	if (x >= cols())
 		return Image();
@@ -133,7 +163,7 @@ Image Image::col(int x) {
 
 	return res;
 }
-Image Image::colRange(const Range& range) {
+Image Image::colRange(const Range& range) const{
 
 	Image res = Image(*this);
 	res._colRange = Range(_colRange.start() + range.start(),
@@ -142,7 +172,7 @@ Image Image::colRange(const Range& range) {
 	return res;
 }
 
-Image Image::row(int y) {
+Image Image::row(int y) const{
 
 	if (y >= rows())
 		return Image();
@@ -152,7 +182,7 @@ Image Image::row(int y) {
 
 	return res;
 }
-Image Image::rowRange(const Range& range) {
+Image Image::rowRange(const Range& range) const{
 
 	Image res = Image(*this);
 	res._rowRange = Range(_rowRange.start() + range.start(),
@@ -211,7 +241,7 @@ Image Image::values(int rows, int cols, int channels, unsigned char value) {
 size_t Image::countRef() const { return *_countRef; }
 
 
-unsigned char* Image::copyData() {
+unsigned char* Image::copyData() const{
 	unsigned char* res = new unsigned char[total()*channels()];
 
 	size_t i = 0;

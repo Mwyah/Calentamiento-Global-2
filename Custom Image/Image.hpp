@@ -10,8 +10,8 @@
 
 class Image {
 public:
-	Image() : Image(0, 0, 0) {}
-	Image(int rows, int cols, int channels) : Image(rows, cols, channels, nullptr) {}
+	Image();
+	Image(int rows, int cols, int channels);
 	Image(int rows, int cols, int channels, unsigned char* data);
 
 	Image(const Image& image);
@@ -20,20 +20,20 @@ public:
 	virtual ~Image();
 
 	Image& operator=(const Image& image);
-	Image operator()(const Range& rowRange, const Range& colRange);
+	Image operator()(const Range& rowRange, const Range& colRange) const;
 
-	Image clone();
-	void cloneTo(Image& image);
+	Image clone() const;
+	void cloneTo(Image& image) const;
 	void create(int rows, int cols, int channels);
 	bool empty() const;
 
 	void release();
 
-	Image col(int x);
-	Image colRange(const Range& range);
+	Image col(int x) const;
+	Image colRange(const Range& range) const;
 
-	Image row(int y);
-	Image rowRange(const Range& range);
+	Image row(int y) const;
+	Image rowRange(const Range& range) const;
 
 	const unsigned char* data() const;
 	unsigned char* data();
@@ -60,7 +60,7 @@ private:
 	size_t* _countRef = nullptr;
 	bool isOuterData = false;
 
-	unsigned char* copyData();
+	unsigned char* copyData() const;
 
 };
 
