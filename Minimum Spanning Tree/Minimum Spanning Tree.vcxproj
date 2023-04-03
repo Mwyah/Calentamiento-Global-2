@@ -139,12 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="SpanningTreeFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edge.hpp" />
     <ClInclude Include="SpanningTreeFinder.hpp" />
     <ClInclude Include="Vertex.hpp" />
+    <ClInclude Include="VertexParser.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

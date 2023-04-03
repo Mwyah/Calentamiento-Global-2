@@ -107,11 +107,11 @@ Image Image::operator()(const Range& rowRange, const Range& colRange) const{
 Image Image::clone() const{
 
 	Image res;
-	cloneTo(res);
+	copyTo(res);
 
 	return res;
 }
-void Image::cloneTo(Image& image) const{
+void Image::copyTo(Image& image) const{
 
 	if (this != &image) {
 		image._colRange = Range(0, cols());

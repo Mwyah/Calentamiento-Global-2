@@ -12,9 +12,9 @@
 
 class Edge final {
 public:
-	Edge(Vertex v1, Vertex v2) {
-		_v1 = v1.ind();
-		_v2 = v2.ind();
+	Edge(Vertex v1, Vertex v2, size_t index1, size_t index2) {
+		_v1 = index1;
+		_v2 = index2;
 		_length = sqrtf((v1.x() - v2.x())^2 + (v1.y() + v2.y())^2);
 	};
 

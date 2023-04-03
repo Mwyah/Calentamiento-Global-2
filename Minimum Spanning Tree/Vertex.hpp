@@ -5,19 +5,25 @@
 #ifndef _CMG2_VERTEX_HPP_
 #define _CMG2_VERTEX_HPP_
 
+#include <string>
+
+#include "VertexParser.hpp"
+
 
 class Vertex final {
 public:
-	Vertex(size_t ind, int x, int y) : _ind(ind), _x(x), _y(y) {}
+	Vertex(std::string name, float x, float y) : _name(name), _x(x), _y(y) {}
 
-	inline size_t ind() const { return _ind; }
-	inline int x() const { return _x; }
-	inline int y() const { return _y; }
+	Vertex(VertexParser::Output data): Vertex(data.name, data.x, data.y) {}
+
+	inline std::string name() const { return _name; }
+	inline float x() const { return _x; }
+	inline float y() const { return _y; }
 
 private:
-	size_t _ind = 0;
-	int _x = 0;
-	int _y = 0;
+	std::string _name = 0;
+	float _x = 0;
+	float _y = 0;
 };
 
 

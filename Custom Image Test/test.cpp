@@ -120,7 +120,7 @@ TEST(Image, Clone) {
     EXPECT_EQ(img2.at(0), 1);
     EXPECT_EQ(img2.at(7), 15);
 
-    img1.cloneTo(img2);
+    img1.copyTo(img2);
     EXPECT_EQ(img1.countRef(), 1);
     EXPECT_EQ(img2.countRef(), 1);
     EXPECT_EQ(img3.countRef(), 1);

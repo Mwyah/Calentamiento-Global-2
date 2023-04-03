@@ -23,7 +23,7 @@ public:
 	Image operator()(const Range& rowRange, const Range& colRange) const;
 
 	Image clone() const;
-	void cloneTo(Image& image) const;
+	void copyTo(Image& image) const;
 	void create(int rows, int cols, int channels);
 	bool empty() const;
 
