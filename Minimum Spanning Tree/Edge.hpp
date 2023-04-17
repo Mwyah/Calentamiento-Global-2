@@ -15,7 +15,7 @@ public:
 	Edge(Vertex v1, Vertex v2, size_t index1, size_t index2) {
 		_v1 = index1;
 		_v2 = index2;
-		_length = sqrtf((v1.x() - v2.x())^2 + (v1.y() + v2.y())^2);
+		_length = sqrtf(powf(v1.x() - v2.x(), 2) + powf(v1.y() - v2.y(), 2));
 	};
 
 	inline size_t v1() const { return _v1; }
@@ -27,6 +27,11 @@ private:
 	size_t _v2 = 0;
 	float _length = 0;
 };
+
+
+inline bool operator<(const Edge& a, const Edge& b) {
+	return a.length() < b.length();
+}
 
 
 #endif

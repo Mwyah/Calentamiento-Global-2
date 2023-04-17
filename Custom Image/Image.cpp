@@ -14,7 +14,7 @@ namespace {
 	}
 
 	bool isValid(int rows, int cols, int channels, unsigned char* data) {
-		return (rows > 0 && cols > 0 && channels > 0 && data);
+		return isValid(rows, cols, channels) && data;
 	}
 }
 
@@ -63,17 +63,22 @@ Image::Image(const Image& image) {
 }
 Image::Image(const Image& image, const Range& rowRange, const Range& colRange) {
 
-	_rowRange = Range(image._rowRange.start() + rowRange.start(), 
-					  std::min(image._rowRange.end(), image._rowRange.start() + rowRange.end()));
-	_colRange = Range(image._colRange.start() + colRange.start(),
-					  std::min(image._colRange.end(), image._colRange.start() + colRange.end()));
-	totalColLen = image.totalColLen;
-	_channels = image._channels;
-	_data = image._data;
-	_countRef = image._countRef;
-	isOuterData = image.isOuterData;
+	if (rowRange.size() > 0 && colRange.size() > 0) {
+		_rowRange = Range(image._rowRange.start() + rowRange.start(), 
+						  std::min(image._rowRange.end(), image._rowRange.start() + rowRange.end()));
+		_colRange = Range(image._colRange.start() + colRange.start(),
+						  std::min(image._colRange.end(), image._colRange.start() + colRange.end()));
+		totalColLen = image.totalColLen;
+		_channels = image._channels;
+		_data = image._data;
+		_countRef = image._countRef;
+		isOuterData = image.isOuterData;
 
 	(*_countRef)++;
+	}
+	else {
+		_countRef = new size_t(1);
+	}
 }
 
 Image::~Image() {
@@ -145,9 +150,12 @@ bool Image::empty() const {
 void Image::release() {
 	(*_countRef)--;
 
-	if (*_countRef == 0 && !isOuterData) {
-		delete[] _data;
-		_data = nullptr;
+	if (*_countRef == 0) {
+		if (!isOuterData) {
+			delete[] _data;
+			_data = nullptr;
+		}
+
 		delete _countRef;
 		_countRef = nullptr;
 	}

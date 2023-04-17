@@ -27,4 +27,11 @@ private:
 };
 
 
+inline bool operator==(const Vertex& a, const Vertex& b) {
+	return (a.name() == b.name()) || (a.x() == b.x() && a.y() == b.y());
+}
+
+inline bool operator!=(const Vertex& a, const Vertex& b) { return !(a == b); }
+
+
 #endif
