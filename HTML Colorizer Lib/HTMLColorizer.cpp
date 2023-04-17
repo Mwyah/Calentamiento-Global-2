@@ -5,7 +5,8 @@
 #include "HTMLColorizer.hpp"
 
 #include <algorithm>
-#include <regex>
+
+void replace_HTML_entities(std::string& str);
 
 
 void HTMLColorizer::addRule(const HTMLRule& rule) {
@@ -17,7 +18,32 @@ void HTMLColorizer::colorize(std::istream& is, std::ostream& os) const {
 
 	if (!is || !os) return;
 
-	std::string ss;
+	std::regex re = createRegex();
+	std::smatch m;
+
+	std::string buf;
+	while (std::getline(is, buf)) {
+
+		replace_HTML_entities(buf);
+
+		auto it = buf.cbegin();
+		while (std::regex_search(it, buf.cend(), m, re)) {
+			os << std::string(it, m[1].first) << m[1] << "<span style=\"color: #"
+				<< ruleList.find(m[2].str())->second
+				<< ";\">" << m[2] << "</span>" << m[3];
+
+			it = m[3].second;
+		}
+
+		os << std::string(it, buf.cend());
+		if (!is.eof()) os << "\n";
+	}
+}
+
+
+//Private
+
+std::regex HTMLColorizer::createRegex() const{
 
 	std::string regexString(R"((\s|^|\.|;|:|!|,|\?)()");
 
@@ -31,11 +57,7 @@ void HTMLColorizer::colorize(std::istream& is, std::ostream& os) const {
 
 	regexString += R"()(\s|$|\.|;|:|!|,|\?))";
 
-	std::regex re(regexString);
-
-	std::smatch m;
-
-	std::regex_search(ss, );
+	return std::regex(regexString);
 }
 
 void replace_HTML_entities(std::string& str) {

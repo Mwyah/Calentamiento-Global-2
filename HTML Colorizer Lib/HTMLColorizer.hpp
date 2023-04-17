@@ -6,6 +6,7 @@
 #define _CMG2_HTML_COLORIZER_HPP_
 
 #include <istream>
+#include <regex>
 #include <map>
 #include "HTMLRule.hpp"
 
@@ -19,6 +20,8 @@ public:
 
 private:
 	std::map<std::string, std::string> ruleList;
+
+	std::regex createRegex() const;
 
 };
 

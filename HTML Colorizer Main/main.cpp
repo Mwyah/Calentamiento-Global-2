@@ -3,19 +3,34 @@
 //
 
 #include "..\HTML Colorizer Lib\HTMLRuleParser.hpp"
-#include <sstream>
-#include <iostream>
+#include "..\HTML Colorizer Lib\HTMLColorizer.hpp"
+#include <fstream>
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
-	std::istringstream rules("a : 111111\n   b: af3209\n cc d: aaaaaa aaaaaa\n n: b\n");
+	if (argc == 4) {
+		std::ifstream ruleFile(argv[1]);
+		std::ifstream inputFile(argv[2]);
+		std::ofstream outputFile(argv[3]);
 
-	HTMLRuleParser parser;
-	parser.parse(rules);
+		if (ruleFile.is_open() && inputFile.is_open() && outputFile.is_open()) {
+			outputFile.clear();
 
-	for (const HTMLRule& rule: parser)
-		std::cout << rule.word << " : " << rule.color << std::endl;
+			HTMLRuleParser parser;
+			parser.parse(ruleFile);
+
+			HTMLColorizer colorizer;
+			for (const auto& it : parser)
+				colorizer.addRule(it);
+
+			colorizer.colorize(inputFile, outputFile);
+		}
+
+		if (ruleFile.is_open()) ruleFile.close();
+		if (inputFile.is_open()) inputFile.close();
+		if (outputFile.is_open()) outputFile.close();
+	}
 
 	return EXIT_SUCCESS;
 }
