@@ -81,8 +81,8 @@ TEST_F(SetTestClass, Init) {
 
 	EXPECT_TRUE(set_init(NULL, 0, NULL, NULL, NULL) == NULL);
 	EXPECT_TRUE(set_init(NULL, 5, charHash, charEquals, NULL) == NULL);
-	EXPECT_TRUE(set_init(emptySet, 0, charHash, charEquals, NULL) == NULL);
-	EXPECT_TRUE(set_init(emptySet, 0, NULL, charEquals, NULL) == NULL);
+	EXPECT_TRUE(set_init(emptySet, 0, charHash, charEquals, NULL) == emptySet);
+	EXPECT_TRUE(set_init(emptySet, 0, NULL, charEquals, NULL) == emptySet);
 	EXPECT_EQ(set_init(emptySet, 5, charHash, charEquals, NULL), emptySet);
 
 	set_init(filledSet, 5, charHash, charEquals, destroy);

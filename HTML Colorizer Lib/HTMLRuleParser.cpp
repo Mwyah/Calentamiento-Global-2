@@ -3,52 +3,65 @@
 //
 
 #include "HTMLRuleParser.hpp"
+#include "ReplaceHTMLEntities.hpp"
 #include <regex>
-
-extern void replace_HTML_entities(std::string& str);  // HTMLColorizer.cpp
 
 
 namespace {
 
 const std::regex colorRegex("([a-fA-F0-9]{6})");
 
+const std::string tokenSeparators[] = {" :", ":"};
+
+enum ParseState {
+	WORD = 0,
+	COLOR = 1
+};
+
 }
 
 
-void HTMLRuleParser::parse(std::istream& is) {
+HTMLRule HTMLRuleParser::parse(std::istream& is){
 
-	if (!is) return;
+	if (!is) return HTMLRule();
 
-	for (std::string s; std::getline(is >> std::ws, s); ) {
-		HTMLRule rule;
-		bool isValidInput = true;
-		size_t ind1 = 0;
+	std::string str;
+	std::getline(is >> std::ws, str);
 
-		for (int parseState = 0; parseState < 2; parseState++) {
-			ind1 = s.find_first_not_of(" :", ind1);
+	std::string word, color;
+	bool isValidInput = true;
+	size_t tokenBegin = 0;
 
-			if (ind1 == s.npos) break;
+	for (int parseState = 0; parseState < 2; parseState++) {
+		tokenBegin = str.find_first_not_of(tokenSeparators[0], tokenBegin);
 
-			size_t ind2 = s.find_first_of(" :", ind1);
-			size_t len = (ind2 == s.npos) ? s.size()-ind1 : ind2 - ind1;
-			std::string arg = s.substr(ind1, len);
-
-			if (parseState == 0)
-				rule.word = arg;
-			else {
-				if (std::regex_match(arg, colorRegex)) rule.color = arg;
-				else isValidInput = false;
-			}
-
-			if (!isValidInput) break;
-
-			ind1 = s.find_first_of(":", ind1);
+		if (tokenBegin == str.npos) {
+			isValidInput = false;
+			break;
 		}
 
-		if (isValidInput) {
-			replace_HTML_entities(rule.word);
-			output.push_back(std::move(rule));
+		size_t tokenEnd = str.find_first_of(tokenSeparators[0], tokenBegin);
+		size_t len = (tokenEnd == str.npos) ? str.size()-tokenBegin : tokenEnd-tokenBegin;
+		std::string token = str.substr(tokenBegin, len);
+
+		if (parseState == WORD) {
+			word = token;
+		}
+		else {
+			if (std::regex_match(token, colorRegex)) color = token;
+			else isValidInput = false;
 		}
 
+		if (!isValidInput) break;
+
+		tokenBegin = str.find_first_of(tokenSeparators[1], tokenBegin);
+	}
+
+	if (isValidInput) {
+		replace_HTML_entities(word);
+		return HTMLRule(word, color);
+	}
+	else {
+		return HTMLRule();
 	}
 }

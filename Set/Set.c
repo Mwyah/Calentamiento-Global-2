@@ -2,6 +2,7 @@
 // Set.c
 //
 
+// Welcome to a red-black tree's domain. Enjoy
 
 #include "Set.h"
 
@@ -193,11 +194,13 @@ void* set_init(void* set, size_t itemSize,
 
 	void* res = NULL;
 
-	if (set && itemSize != 0 && hash && equals) {
+	if (set) {
 		res = set;
 
-		set_clear(set, destroy);
-		_setInit(set, itemSize, hash, equals);
+		if (itemSize > 0 && hash && equals) {
+			set_clear(set, destroy);
+			_setInit(set, itemSize, hash, equals);
+		}
 	}
 
 	return res;

@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -130,6 +130,7 @@
     <ClInclude Include="HTMLColorizer.hpp" />
     <ClInclude Include="HTMLRule.hpp" />
     <ClInclude Include="HTMLRuleParser.hpp" />
+    <ClInclude Include="ReplaceHTMLEntities.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HTMLColorizer.cpp" />

@@ -1,0 +1,4 @@
+rose is red,
+violet is blue,
+flag is win,
+baba is you.

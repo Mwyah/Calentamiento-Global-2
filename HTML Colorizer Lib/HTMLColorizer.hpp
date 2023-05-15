@@ -16,12 +16,11 @@ public:
 
 	void addRule(const HTMLRule& rule);
 
+	// Colorizes data from 'is' and put result in 'os' 
 	void colorize(std::istream& is, std::ostream& os) const;
 
 private:
-	std::map<std::string, std::string> ruleList;
-
-	std::regex createRegex() const;
+	std::vector<HTMLRule> ruleList;
 
 };
 

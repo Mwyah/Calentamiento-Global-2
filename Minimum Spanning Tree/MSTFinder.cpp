@@ -7,7 +7,9 @@
 #include <algorithm>
 #include <ostream>
 
-auto MSTFinder::findVertexInDisjointSet(size_t ind) {
+namespace {
+
+auto findEdgeInDisjointSet(std::vector<std::set<size_t>>& disjointSet, size_t ind) {
 	for (auto it = disjointSet.begin(); it != disjointSet.end(); it++) {
 		if (std::find(it->begin(), it->end(), ind) != it->end())
 			return it;
@@ -16,47 +18,38 @@ auto MSTFinder::findVertexInDisjointSet(size_t ind) {
 	return disjointSet.end();
 };
 
+}
+
 bool MSTFinder::addVertex(const Vertex& vertex) {
-
-	if (std::find(vertices.begin(), vertices.end(), vertex) == vertices.end()) {
-
+	if (!vertex.name().empty() && std::find(vertices.begin(), vertices.end(), vertex) == vertices.end()) {
 		vertices.push_back(vertex);
-		isValidMST = false;
-
 		return true;
 	}
 
 	return false;
 }
 
-bool MSTFinder::addVertex(Vertex&& vertex) {
+void MSTFinder::findMST(std::ostream& os) {
 
-	if (std::find(vertices.begin(), vertices.end(), vertex) == vertices.end()) {
+	if (vertices.size() < 2) return;
 
-		vertices.push_back(vertex);
-		isValidMST = false;
 
-		return true;
+	std::vector<Edge> edges;
+	for (size_t i = 0; i<vertices.size()-1; i++) {
+		for (size_t j = i+1; j<vertices.size(); j++) {
+			edges.push_back(Edge(vertices[i], vertices[j], i, j));
+		}
 	}
 
-	return false;
-}
+	std::sort(edges.begin(), edges.end());
 
-void MSTFinder::findMST() {
-
-	if (isValidMST) return; 
-
-
-	edges.clear();
-	MST.clear();
-	disjointSet.clear();
-
-	fillAndSortVertices();
+	std::vector<std::set<size_t>> disjointSet;
+	size_t MSTSize = 0;
 
 	for (auto& e: edges) {
 
-		auto it1 = findVertexInDisjointSet(e.v1());
-		auto it2 = findVertexInDisjointSet(e.v2());
+		auto it1 = findEdgeInDisjointSet(disjointSet, e.v1());
+		auto it2 = findEdgeInDisjointSet(disjointSet, e.v2());
 
 		if (it1 == disjointSet.end()) {
 			if (it2 == disjointSet.end())
@@ -77,47 +70,18 @@ void MSTFinder::findMST() {
 			}
 		}
 
-		MST.push_back(e);
+		os << vertices[e.v1()].name()
+			<< " - "
+			<< vertices[e.v2()].name();
 
-		if (MST.size() == vertices.size()-1) break;
-	}
+		MSTSize ++;
 
-	isValidMST = true;
-
-}
-
-void MSTFinder::printMST(std::ostream& os) {
-
-	findMST();
-
-	for (const auto& e: MST) {
-		os << vertices[e.v1()].name() 
-		   << " - " 
-		   << vertices[e.v2()].name() 
-		   << std::endl;
-	}
-}
-
-
-void MSTFinder::fillAndSortVertices() {
-	for (size_t i = 0; i<vertices.size()-1; i++) {
-		for (size_t j = i+1; j<vertices.size(); j++) {
-			edges.push_back(Edge(vertices[i], vertices[j], i, j));
+		if (MSTSize == vertices.size()-1) {
+			break;
+		}
+		else {
+			os << std::endl;
 		}
 	}
 
-	std::sort(edges.begin(), edges.end());
-}
-
-void MSTFinder::printEdges(std::ostream& os) {
-
-	findMST();
-
-	for (const auto& e: edges) {
-		os << vertices[e.v1()].name()
-			<< " - "
-			<< vertices[e.v2()].name()
-			<< " " << e.length()
-			<< std::endl;
-	}
 }

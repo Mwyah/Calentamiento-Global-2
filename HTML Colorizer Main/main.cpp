@@ -5,11 +5,15 @@
 #include "..\HTML Colorizer Lib\HTMLRuleParser.hpp"
 #include "..\HTML Colorizer Lib\HTMLColorizer.hpp"
 #include <fstream>
+#include <iostream>
 
+
+// Debug argument line: "ruleFile.txt" "inputFile.txt" "outputFile.html"
 
 int main(int argc, char* argv[]) {
 
 	if (argc == 4) {
+
 		std::ifstream ruleFile(argv[1]);
 		std::ifstream inputFile(argv[2]);
 		std::ofstream outputFile(argv[3]);
@@ -17,12 +21,10 @@ int main(int argc, char* argv[]) {
 		if (ruleFile.is_open() && inputFile.is_open() && outputFile.is_open()) {
 			outputFile.clear();
 
-			HTMLRuleParser parser;
-			parser.parse(ruleFile);
-
 			HTMLColorizer colorizer;
-			for (const auto& it : parser)
-				colorizer.addRule(it);
+			HTMLRule rule = HTMLRuleParser::parse(ruleFile);
+			for (;!rule.empty(); rule = HTMLRuleParser::parse(ruleFile))
+				colorizer.addRule(rule);
 
 			colorizer.colorize(inputFile, outputFile);
 		}

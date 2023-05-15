@@ -1,0 +1,5 @@
+is: 808080
+red: ff1c0b
+blue: 6935ff
+win: ffc930
+you: ff0e6f

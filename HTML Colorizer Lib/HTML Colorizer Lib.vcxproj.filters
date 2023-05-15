@@ -24,6 +24,9 @@
     <ClInclude Include="HTMLRule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ReplaceHTMLEntities.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HTMLRuleParser.cpp">

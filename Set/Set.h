@@ -41,7 +41,7 @@ size_t set_next(const void* set, size_t item_id);
 size_t set_prev(const void* set, size_t item_id);
 size_t set_stop(const void* set);
 const void* set_current(const void* set, size_t item_id);
-void set_erase(void* set, size_t item_id, void (*destroy)(void*));
+void set_erase(void* set, size_t item_id, void (*destroy)(void*));  //maybe set_extract
 
 
 #ifdef __cplusplus

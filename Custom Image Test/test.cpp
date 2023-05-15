@@ -5,6 +5,8 @@ unsigned char data[] = {1,  2,  3,  4,  5,
                         11, 12, 13, 14, 15, 
                         16, 17, 18, 19, 20};
 
+unsigned char data2[8000000];
+
 
 TEST(Image, Constructors) {
 	Image img1 = Image();

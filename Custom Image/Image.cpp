@@ -92,6 +92,8 @@ Image& Image::operator=(const Image& image) {
 		return *this;
 	}
 
+	release();
+
 	_rowRange = image._rowRange;
 	_colRange = image._colRange;
 	totalColLen = image.totalColLen;
