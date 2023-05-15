@@ -35,5 +35,8 @@
     <ClCompile Include="HTMLColorizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ReplaceHTMLEntites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

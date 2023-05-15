@@ -16,13 +16,12 @@ const std::string HTMLColorTag[] = {"<span style=\"color: #", ";\">", "</span>"}
 
 
 void HTMLColorizer::addRule(const HTMLRule& rule) {
-	if (!rule.empty() && 
-		std::none_of(ruleList.begin(), ruleList.end(), [word = rule.word()](const HTMLRule r) { return r.word() == word; })) {
+	if (std::none_of(ruleList.begin(), ruleList.end(), [word = rule.word()](const HTMLRule r) { return r.word() == word; })) {
 		ruleList.push_back(rule);
 	}
 }
 
-void HTMLColorizer::colorize(std::istream& is, std::ostream& os) const {
+std::string HTMLColorizer::colorize(std::string& input) const {
 
 	if (!is || !os) return;
 

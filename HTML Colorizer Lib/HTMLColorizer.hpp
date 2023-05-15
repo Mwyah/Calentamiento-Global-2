@@ -5,7 +5,7 @@
 #ifndef _CMG2_HTML_COLORIZER_HPP_
 #define _CMG2_HTML_COLORIZER_HPP_
 
-#include <istream>
+#include <string>
 #include <regex>
 #include <map>
 #include "HTMLRule.hpp"
@@ -16,8 +16,7 @@ public:
 
 	void addRule(const HTMLRule& rule);
 
-	// Colorizes data from 'is' and put result in 'os' 
-	void colorize(std::istream& is, std::ostream& os) const;
+	std::string colorize(const std::string& input) const;
 
 private:
 	std::vector<HTMLRule> ruleList;

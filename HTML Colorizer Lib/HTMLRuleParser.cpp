@@ -5,6 +5,7 @@
 #include "HTMLRuleParser.hpp"
 #include "ReplaceHTMLEntities.hpp"
 #include <regex>
+#include <exception>
 
 
 namespace {
@@ -13,17 +14,24 @@ const std::regex colorRegex("([a-fA-F0-9]{6})");
 
 const std::string tokenSeparators[] = {" :", ":"};
 
-enum ParseState {
+enum class ParseState {
 	WORD = 0,
 	COLOR = 1
 };
+
+ParseState& operator++(ParseState& ps) {
+	int i = static_cast<int>(ps);
+	++i;
+	ps = static_cast<ParseState>(i);
+	return ps;
+}
 
 }
 
 
 HTMLRule HTMLRuleParser::parse(std::istream& is){
 
-	if (!is) return HTMLRule();
+	if (!is) throw std::exception();
 
 	std::string str;
 	std::getline(is >> std::ws, str);
@@ -32,7 +40,7 @@ HTMLRule HTMLRuleParser::parse(std::istream& is){
 	bool isValidInput = true;
 	size_t tokenBegin = 0;
 
-	for (int parseState = 0; parseState < 2; parseState++) {
+	for (ParseState parseState = ParseState::WORD; parseState <= ParseState::COLOR; parseState++) {
 		tokenBegin = str.find_first_not_of(tokenSeparators[0], tokenBegin);
 
 		if (tokenBegin == str.npos) {
